@@ -20,6 +20,12 @@ public class PlayerMovement : MonoBehaviour
 
     float originalHeight;
     Vector2 originalOffset;
+     
+    private bool JumpPressed;
+    private bool slidePressed;
+
+
+  
 
     void Start()
     {
@@ -37,11 +43,20 @@ public class PlayerMovement : MonoBehaviour
         HandleJump();
         HandleSlide();
         UpdateAnimator();
+      
     }
-
     void FixedUpdate()
     {
         AutoRun();
+    }
+    
+    public void OnJumpButton()
+    {
+        JumpPressed = true;
+    }
+    public void OnSlideButton()
+    {
+        slidePressed = true;
     }
 
     void AutoRun()
@@ -54,16 +69,18 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isSliding)
+        if ((Input.GetKeyDown(KeyCode.Space) ||JumpPressed) && isGrounded && !isSliding)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            JumpPressed = false;
         }
     }
 
     void HandleSlide()
     {
-        if (Input.GetKeyDown(KeyCode.S) && isGrounded && !isSliding)
+        if ((Input.GetKeyDown(KeyCode.S) || slidePressed) && isGrounded && !isSliding)
         {
+            slidePressed = false;
             StartCoroutine(Slide());
         }
     }
