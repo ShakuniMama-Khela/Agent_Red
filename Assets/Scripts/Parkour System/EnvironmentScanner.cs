@@ -35,19 +35,21 @@ public class EnvironmentScanner : MonoBehaviour
         );
         if(hitData.forwardHitFound )
         {
-            var heightOrigin = hitData.forwardHit.point + Vector2.up * 0.02f;
+            Vector2 heightOrigin = hitData.forwardHit.point + (Vector2.up * heightRayLength);
+
+            // 2. Shoot the ray DOWN to find the top surface of the block
             hitData.heightHit = Physics2D.Raycast(
-                  heightOrigin,
-                  Vector2.up,
-                  heightRayLength,
-                  obstacleLayer
-                  );
+                heightOrigin,
+                Vector2.down,
+                heightRayLength,
+                obstacleLayer
+            );
 
             hitData.heightHitFound = hitData.heightHit.collider != null;
 
             Debug.DrawRay(
             heightOrigin,
-            Vector2.up * heightRayLength,
+            Vector2.down * heightRayLength,
             hitData.heightHitFound ? Color.red : Color.green,
             //Color.yellow,
             0.1f
@@ -55,7 +57,10 @@ public class EnvironmentScanner : MonoBehaviour
         }
         return hitData;
     }
-
+    public void Update()
+    {
+        ObstacleCheck();
+    }
 }
         public struct ObstacleHitData2D
         {
